@@ -38,3 +38,12 @@ new terminal
 
 then to see position
 ros2 topic echo joint_state_node
+
+
+ros2 service call /homing std_srvs/srv/Trigger
+ros2 service call /grip std_srvs/srv/SetBool "{data: true}"
+
+
+
+#### this will loop ###
+ros2 topic echo /joint_state 
