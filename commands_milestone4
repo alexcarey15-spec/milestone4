@@ -1,0 +1,40 @@
+/MXEN3005/mxen_ws/src$ colcon build
+/MXEN3005/mxen_ws/src$ source install/local_setup.bash
+xarmserver
+
+------MAKE SURE TO SOURCE ALL NEW TERMINALS----
+
+
+new terminal
+~/MXEN3005/mxen_ws/src$ ros2 run wx250s gripper_node
+
+new terminal
+~/MXEN3005/mxen_ws/src$ ros2 run wx250s homing_node
+
+new terminal
+$ ipython
+Python 3.12.3 (main, Jan 22 2026, 20:57:42) [GCC 13.3.0]
+Type 'copyright', 'credits' or 'license' for more information
+IPython 8.20.0 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: from xarmclient import XArm
+
+In [2]: xarm = XArm()
+
+In [3]: xarm.home()
+
+In [4]: xarm.set_joints((30,50,-60,0,35,0))
+Out[4]: 0
+
+In [5]:
+
+
+new terminal
+/MXEN3005/mxen_ws/src$ rqt
+
+
+new terminal
+/MXEN3005/mxen_ws/src$ ros2 run wx250s joint_state_node
+
+then to see position
+ros2 topic echo joint_state_node
