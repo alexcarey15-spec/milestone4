@@ -61,42 +61,24 @@ class JointPTPNode(Node):
         feedback_msg = JointPTP.Feedback()
         result_msg = JointPTP.Result()
         goal_joints = goal_handle.request.joint_goal
+        previous_joints = self.curr_joints#compare current to previous
         while True:
             feedback_msg.joint_present = self.curr_joints
             goal_handle.publish_feedback(feedback_msg)
             if math.dist(goal_joints,feedback_msg.joint_present) < 3:
                 self.get_logger().info("Goal Achieved")
-                return result_msg.succcess == True
-            else:
+                goal_handle.succeed()
+                result_msg.success = True
                 
+                return result_msg
+            #if it stalls and doesnt move for a while then abort, double check stall condition
+            if math.dist(self.curr_joints,previous_joints) < 0.01:
                 self.get_logger().info("Goal Failed")
-                return result_msg.succcess == False
+                goal_handle.abort()
+                result_msg.success = False
+                return result_msg
 
-        if goal.is_cancel_requested:
-            goal.cancelled()
-            self.get_logger().info("Goal Cancelled")
-            return #action.Result()
         
-        temp = feedback_msg.sequence[i] + feedback_msg.sequence[i-1]
-        feedback_msg.sequence.append(temp)
-        goal.publish_feedback(feedback_msg)
-
-        with self.goal_lock:
-            if not goal.is_active:
-                self.get_logger().info("Goal aborted")
-                return #result
-            
-        
-        result.sequence = feedback_msg.sequence
-
-        self.get_logger().info("Returning result: {result.sequence}")
-        
-        while rclpy.ok():
-            
-            time.sleep(0.1) 
-        
-        return result_msg
-
 def main(args=None):
     try:
         with rclpy.init(args=args):
