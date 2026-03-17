@@ -3,5 +3,5 @@
     <node pkg="wx250s" exec="gripper_node" name="gripper_node" />
     <node pkg="wx250s" exec="joint_state_node" name="joint_state_node" />
     <node pkg="wx250s" exec="joint_ptp_node" name="joint_ptp_node" />
-    <executable cmd="python3 /home/robot/.local/bin/xarmserver" shell="true" output="screen" />
+    <executable cmd="bash /home/robot/.local/bin/xarmserver" shell="true" output="screen" />
 </launch>
